@@ -1,5 +1,4 @@
 <script lang="ts">
-// depracate , not used
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -18,7 +17,7 @@ export default defineComponent({
 });
 </script>
 
-<template>
+<template> 
     <div class="flex min-h-screen items-center justify-center bg-white p-6 font-nunito">
       <div class="max-w-7xl w-full bg-white rounded-lg  flex gap-20">
         <div class="w-1/2 p-4">
