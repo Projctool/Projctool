@@ -35,3 +35,7 @@ export default defineLazyEventHandler(async () => {
     return response.toAIStreamResponse();
   });
 });
+
+function useRuntimeConfig() {
+  throw new Error('Function not implemented.');
+}
