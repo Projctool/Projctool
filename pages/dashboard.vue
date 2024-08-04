@@ -1,7 +1,6 @@
 <script >
 import GanttChart from './GanttChart.vue';
 import { useRoute } from 'vue-router';
-import { ref } from 'vue';
 import { differenceInDays, differenceInMonths } from 'date-fns';
 import Chat from "~/pages/chat.vue";
 
@@ -12,11 +11,6 @@ export default {
   },
   data() {
     const route = useRoute();
-    const startDate = new Date(route.query.startDate || '');
-    const endDate = new Date(route.query.endDate || '');
-    const totalDays = differenceInDays(endDate, startDate);
-    const months = Math.floor(totalDays / 30);
-    const days = totalDays % 30;
     return {
       showModal: false,
       project: {
@@ -27,7 +21,6 @@ export default {
         endDate: route.query.endDate || '',
         description: route.query.description || ''
       },
-      estimatedDuration: `${months}m ${days}d`,
       isPopupVisible: false,
       isMinimized: false,
       selected: null,
@@ -40,6 +33,24 @@ export default {
         }
       ]
     };
+  },
+  computed: {
+    estimatedDuration() {
+      const { startDate, endDate } = this.project;
+
+      if (!startDate || !endDate) {
+        return 'N/A';
+      }
+
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+
+      // Calculate the number of full months and the remaining days
+      const totalMonths = differenceInMonths(end, start);
+      const remainingDays = differenceInDays(end, new Date(start.getFullYear(), start.getMonth() + totalMonths, start.getDate()));
+
+      return `${totalMonths} months ${remainingDays} days`;
+    },
   },
   methods: {
     toggleSidebar() {
