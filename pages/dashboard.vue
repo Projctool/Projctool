@@ -1,27 +1,52 @@
 <script >
 import GanttChart from './GanttChart.vue';
+import { useRoute } from 'vue-router';
+import { ref } from 'vue';
+import { differenceInDays, differenceInMonths } from 'date-fns';
+import Chat from "~/pages/chat.vue";
 
 export default {
   components: {
+    Chat,
     GanttChart
   },
   data() {
+    const route = useRoute();
+    const startDate = new Date(route.query.startDate || '');
+    const endDate = new Date(route.query.endDate || '');
+    const totalDays = differenceInDays(endDate, startDate);
+    const months = Math.floor(totalDays / 30);
+    const days = totalDays % 30;
     return {
+      showModal: false,
+      project: {
+        name: route.query.name || '',
+        budget: route.query.budget || '',
+        methodology: route.query.methodology || '',
+        startDate: route.query.startDate || '',
+        endDate: route.query.endDate || '',
+        description: route.query.description || ''
+      },
+      estimatedDuration: `${months}m ${days}d`,
+      isPopupVisible: false,
       isMinimized: false,
-      selected: null,  
+      selected: null,
       menuItems: [
-        { 
-          label: 'Dashboard', iconPath: 'M4.317 2H7.34491C8.60804 2 9.62033 3.15 9.62033 4.561V7.97C9.62033 9.39 8.60804 10.53 7.34491 10.53H4.317C3.06283 10.53 2.04158 9.39 2.04158 7.97V4.561C2.04158 3.15 3.06283 2 4.317 2ZM4.317 13.4697H7.34491C8.60804 13.4697 9.62033 14.6107 9.62033 16.0307V19.4397C9.62033 20.8497 8.60804 21.9997 7.34491 21.9997H4.317C3.06283 21.9997 2.04158 20.8497 2.04158 19.4397V16.0307C2.04158 14.6107 3.06283 13.4697 4.317 13.4697ZM17.6829 2H14.655C13.3919 2 12.3796 3.15 12.3796 4.561V7.97C12.3796 9.39 13.3919 10.53 14.655 10.53H17.6829C18.9371 10.53 19.9583 9.39 19.9583 7.97V4.561C19.9583 3.15 18.9371 2 17.6829 2ZM14.655 13.4697H17.6829C18.9371 13.4697 19.9583 14.6107 19.9583 16.0307V19.4397C19.9583 20.8497 18.9371 21.9997 17.6829 21.9997H14.655C13.3919 21.9997 12.3796 20.8497 12.3796 19.4397V16.0307C12.3796 14.6107 13.3919 13.4697 14.655 13.4697Z' 
+        {
+          label: 'Dashboard', iconPath: 'M4.317 2H7.34491C8.60804 2 9.62033 3.15 9.62033 4.561V7.97C9.62033 9.39 8.60804 10.53 7.34491 10.53H4.317C3.06283 10.53 2.04158 9.39 2.04158 7.97V4.561C2.04158 3.15 3.06283 2 4.317 2ZM4.317 13.4697H7.34491C8.60804 13.4697 9.62033 14.6107 9.62033 16.0307V19.4397C9.62033 20.8497 8.60804 21.9997 7.34491 21.9997H4.317C3.06283 21.9997 2.04158 20.8497 2.04158 19.4397V16.0307C2.04158 14.6107 3.06283 13.4697 4.317 13.4697ZM17.6829 2H14.655C13.3919 2 12.3796 3.15 12.3796 4.561V7.97C12.3796 9.39 13.3919 10.53 14.655 10.53H17.6829C18.9371 10.53 19.9583 9.39 19.9583 7.97V4.561C19.9583 3.15 18.9371 2 17.6829 2ZM14.655 13.4697H17.6829C18.9371 13.4697 19.9583 14.6107 19.9583 16.0307V19.4397C19.9583 20.8497 18.9371 21.9997 17.6829 21.9997H14.655C13.3919 21.9997 12.3796 20.8497 12.3796 19.4397V16.0307C12.3796 14.6107 13.3919 13.4697 14.655 13.4697Z'
         },
-        { 
-          label: 'Projects', iconPath: 'M6.81681 2.0004H15.183C18.2297 2.0004 19.9497 3.9294 19.9587 7.3304V16.6704C19.9587 20.0704 18.2297 22.0004 15.183 22.0004H6.81681C3.77009 22.0004 2.04202 20.0704 2.04202 16.6704V7.3304C2.04202 3.9294 3.77009 2.0004 6.81681 2.0004ZM11.0443 17.8604C11.4304 17.8604 11.752 17.5404 11.7878 17.1104V6.9204C11.8236 6.6104 11.6901 6.2994 11.4483 6.1304C11.1965 5.9604 10.892 5.9604 10.651 6.1304C10.4082 6.2994 10.2747 6.6104 10.3007 6.9204V17.1104C10.3464 17.5404 10.668 17.8604 11.0443 17.8604ZM15.166 17.8604C15.5422 17.8604 15.8638 17.5404 15.9095 17.1104V13.8304C15.9355 13.5094 15.802 13.2104 15.5593 13.0404C15.3183 12.8704 15.0137 12.8704 14.7629 13.0404C14.5201 13.2104 14.3866 13.5094 14.4224 13.8304V17.1104C14.4583 17.5404 14.7799 17.8604 15.166 17.8604ZM7.61321 17.1104C7.57738 17.5404 7.25577 17.8604 6.86967 17.8604C6.48446 17.8604 6.16196 17.5404 6.12702 17.1104V10.2004C6.10015 9.8894 6.23363 9.5804 6.4764 9.4104C6.71738 9.2404 7.02286 9.2404 7.26473 9.4104C7.50571 9.5804 7.64098 9.8894 7.61321 10.2004V17.1104Z' }
+        {
+          label: 'Projects', iconPath: 'M6.81681 2.0004H15.183C18.2297 2.0004 19.9497 3.9294 19.9587 7.3304V16.6704C19.9587 20.0704 18.2297 22.0004 15.183 22.0004H6.81681C3.77009 22.0004 2.04202 20.0704 2.04202 16.6704V7.3304C2.04202 3.9294 3.77009 2.0004 6.81681 2.0004ZM11.0443 17.8604C11.4304 17.8604 11.752 17.5404 11.7878 17.1104V6.9204C11.8236 6.6104 11.6901 6.2994 11.4483 6.1304C11.1965 5.9604 10.892 5.9604 10.651 6.1304C10.4082 6.2994 10.2747 6.6104 10.3007 6.9204V17.1104C10.3464 17.5404 10.668 17.8604 11.0443 17.8604ZM15.166 17.8604C15.5422 17.8604 15.8638 17.5404 15.9095 17.1104V13.8304C15.9355 13.5094 15.802 13.2104 15.5593 13.0404C15.3183 12.8704 15.0137 12.8704 14.7629 13.0404C14.5201 13.2104 14.3866 13.5094 14.4224 13.8304V17.1104C14.4583 17.5404 14.7799 17.8604 15.166 17.8604ZM7.61321 17.1104C7.57738 17.5404 7.25577 17.8604 6.86967 17.8604C6.48446 17.8604 6.16196 17.5404 6.12702 17.1104V10.2004C6.10015 9.8894 6.23363 9.5804 6.4764 9.4104C6.71738 9.2404 7.02286 9.2404 7.26473 9.4104C7.50571 9.5804 7.64098 9.8894 7.61321 10.2004V17.1104Z'
+        }
       ]
     };
   },
-  
   methods: {
     toggleSidebar() {
       this.isMinimized = !this.isMinimized;
+    },
+    toggleModal() {
+      this.showModal = !this.showModal;
     },
     handleMenuClick(index) {
       this.selected = index;
@@ -111,6 +136,56 @@ export default {
       </div>
     </aside>
 
+    <div>
+      <!-- Modal -->
+      <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg relative">
+          <button @click="toggleModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+          <h1 class="text-2xl font-bold mb-4">Project Details</h1>
+          <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+            <div class="mb-4">
+              <label class="block text-sm font-semibold mb-2">Project Name</label>
+              <input v-model="project.name" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md" required/>
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-semibold mb-2">Budget</label>
+              <input v-model="project.budget" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md" required/>
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-semibold mb-2">Methodology</label>
+              <input v-model="project.methodology" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md" required/>
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-semibold mb-2">Start Date</label>
+              <input v-model="project.startDate" type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md" required/>
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-semibold mb-2">End Date</label>
+              <input v-model="project.endDate" type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md" required/>
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-semibold mb-2">Description</label>
+              <textarea v-model="project.description" class="w-full px-3 py-2 border border-gray-300 rounded-md" rows="4"></textarea>
+            </div>
+            <p><strong>Estimated Duration:</strong> {{ estimatedDuration }}</p>
+            <!-- <GanttChart :startDate="project.startDate" :endDate="project.endDate" class="mt-6"/> -->
+          </div>
+        </div>
+      </div>
+      <!-- Show Modal Button -->
+      <button
+          @click="toggleModal"
+          class="fixed bottom-4 left-4 bg-blue-500 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-blue-600 z-50"
+      >
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 1.5C5.702 1.5 1.5 5.702 1.5 12S5.702 22.5 12 22.5 22.5 18.298 22.5 12 18.298 1.5 12 1.5zM12 20.25a8.25 8.25 0 1 1 0-16.5 8.25 8.25 0 0 1 0 16.5zm-1.5-12a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm1.5 7.5c-1.305 0-2.418-.843-2.818-2h1.636a1.5 1.5 0 0 0 0-3h-1.636c.4-1.157 1.513-2 2.818-2 1.305 0 2.418.843 2.818 2h-1.636a1.5 1.5 0 0 0 0 3h1.636c-.4 1.157-1.513 2-2.818 2z"/>
+        </svg>
+      </button>
+    </div>
 
     <main class="flex-1 p-6 bg-gray-100 rounded-[30px]">
       <div class="flex justify-between items-center mb-6">
@@ -133,19 +208,19 @@ export default {
 
         <div class="flex items-center space-x-4">
           <button class="text-gray-700 py-2 px-4 rounded-[30px] border border-primary flex items-center">
-          <svg class="w-4 h-4 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/       2000/svg">
+          <svg class="w-4 h-4 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v12m0 0l-4-4m4 4l4-4m-4         4V4m0 16h8m-8 0H4"></path>
           </svg>
           Download
         </button>
 
           <div class="bg-whitegray text-gray-700 py-2 px-4 rounded-[30px] shadow">
-            
-            10-04-2024
+
+            {{ project.startDate }}
           </div >
           <div class="bg-whitegray text-gray-700 py-2 px-4 rounded-[30px] shadow">
-           
-            25-07-2024
+
+            {{ project.endDate }}
           </div>
         </div>
 
@@ -166,7 +241,7 @@ export default {
           </div>
           <div class="ml-4  ">
             <p class="text-sm font-light">Project's Name</p>
-            <h2 class="text-xl font-extrabold text-gray-600">Starfish</h2>
+            <h2 class="text-xl font-extrabold text-gray-600">{{ project.name }}</h2>
           </div>
         </div>
 
@@ -184,7 +259,7 @@ export default {
           </div>
           <div class="ml-4  ">
             <p class="text-sm font-light">Budget</p>
-            <h2 class="text-xl font-extrabold text-gray-600">$20,000</h2>
+            <h2 class="text-xl font-extrabold text-gray-600">{{ project.budget }}</h2>
           </div>
         </div>
 
@@ -202,7 +277,7 @@ export default {
           </div>
           <div class="ml-4  ">
             <p class="text-sm font-light">Project Methodology</p>
-            <h2 class="text-xl font-extrabold text-gray-600">Agile</h2>
+            <h2 class="text-xl font-extrabold text-gray-600">{{ project.methodology }}</h2>
           </div>
         </div>
 
@@ -220,7 +295,7 @@ export default {
           </div>
           <div class="ml-4  ">
             <p class="text-sm font-light">Estimated Duration</p>
-            <h2 class="text-xl font-extrabold text-gray-600">3m 14d</h2>
+            <h2 class="text-xl font-extrabold text-gray-600">{{ estimatedDuration }}</h2>
           </div>
         </div>
       </div>
@@ -260,29 +335,9 @@ export default {
         </div>
 
 
-      <div class="bg-whitegray p-5 rounded-[30px] shadow">
+      <div class="bg-whitegray p-7 rounded-[30px] shadow">
         <h2 class="text-xl font-semibold mb-4">Chat IA</h2>
-        <div class="space-y-4">
-          <div class="bg-gray-600 p-3 rounded">
-            <p class="text-white text-sm">Hola! He generado un esquema del proyecto inicial para ti. Esto incluye un cronograma preliminar y una distribución de tareas. ¿Hay algo que te gustaría ajustar en este plan?</p>
-          </div>
-          <div class="bg-gray-800 p-3 rounded self-end">
-            <p class="text-white text-sm">Sí, me gustaría revisar el cronograma. La fase de desarrollo parece un poco apretada. ¿Podrías extenderla hasta mediados de agosto?</p>
-          </div>
-          <div class="bg-gray-600 p-3 rounded">
-            <p class="text-white text-sm">Entiendo. Extenderé la fase de desarrollo hasta el 15 de agosto. Esto afectará el cronograma general y podría incrementar el presupuesto y la asignación de recursos. ¿Cómo te gustaría proceder?</p>
-          </div>
-        </div>
-        <div class="flex items-center space-x-2">
-          <input type="text" class="w-full flex-1 p-2  border rounded-[30px] mt-4" placeholder="Text here...">
-          <button class="p-2 mt-4 bg-primary text-white rounded-full flex items-center justify-center hover:bg-blue-800 transition duration-300 ease-in-out">
-        
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-          </svg>
-          </button>
-        </div>
-        
+        <Chat />
       </div>
 
 
@@ -308,6 +363,4 @@ aside.w-20 nav ul {
   flex-direction: column;
   align-items: center;
 }
-
-
 </style>

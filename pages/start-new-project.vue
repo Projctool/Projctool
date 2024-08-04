@@ -1,20 +1,54 @@
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script>
 import { useRouter } from 'vue-router';
+import { ref } from 'vue';
 
-
-export default defineComponent({
+export default {
   setup() {
     const router = useRouter();
-    const goToDashboard = () => {
-      router.push('/dashboard');
+    const projectName = ref('');
+    const budget = ref('');
+    const methodology = ref('');
+    const startDate = ref('');
+    const endDate = ref('');
+    const description = ref('');
+
+    const createProject = (event) => {
+      event.preventDefault();
+      console.log('Submit button clicked');
+      console.log('createProject method called');
+      console.log('Form Data:', {
+        projectName: projectName.value,
+        budget: budget.value,
+        methodology: methodology.value,
+        startDate: startDate.value,
+        endDate: endDate.value,
+        description: description.value
+      });
+
+      router.push({
+        path: '/dashboard',
+        query: {
+          name: projectName.value,
+          budget: budget.value,
+          methodology: methodology.value,
+          startDate: startDate.value,
+          endDate: endDate.value,
+          description: description.value,
+        }
+      });
     };
 
     return {
-      goToDashboard,
+      projectName,
+      budget,
+      methodology,
+      startDate,
+      endDate,
+      description,
+      createProject
     };
-  },
-});
+  }
+};
 </script>
 
 <template> 
@@ -60,41 +94,38 @@ export default defineComponent({
         
         <div class="w-1/2 bg-gray-50 shadow-lg rounded-[30px] p-8">
           <h2 class="text-xl font-bold mb-6">Project Information</h2>
-          <form>
+          <form @submit="createProject">
             <div class="mb-4">
               <label class="block text-gray-700 mb-2" for="project-name">Project Name</label>
-              <input type="text" id="project-name" class="w-full p-2 border border-gray-300 rounded-[30px]" placeholder="Starfish" />
+              <input v-model="projectName" type="text" id="project-name" class="w-full p-2 border border-gray-300 rounded-[30px]" placeholder="Starfish" />
             </div>
             <div class="mb-4">
               <label class="block text-gray-700 mb-2" for="budget">Budget</label>
-              <input type="text" id="budget" class="w-full p-2 border border-gray-300 rounded-[30px]" placeholder="$20 000" />
+              <input v-model="budget" type="text" id="budget" class="w-full p-2 border border-gray-300 rounded-[30px]" placeholder="$20 000" />
             </div>
             <div class="mb-4">
               <label class="block text-gray-700 mb-2" for="methodology">Project Methodology</label>
-              <input type="text" id="methodology" class="w-full p-2 border border-gray-300 rounded-[30px]" placeholder="Agile" />
+              <input v-model="methodology" type="text" id="methodology" class="w-full p-2 border border-gray-300 rounded-[30px]" placeholder="Agile" />
             </div>
-
             <div class="flex justify-center space-x-5">
-                <div class="mb-4 w-full">
-                    <label class="block text-gray-700 mb-2" for="start-date">Start Date</label>
-                    <input type="date" id="start-date" class="w-full p-2 border border-gray-300 rounded-[30px]" value="2024-10-04" />
-                </div>
-                <div class="mb-4 w-full">
-                    <label class="block text-gray-700 mb-2" for="end-date">End Date</label>
-                    <input type="date" id="end-date" class="w-full p-2 border border-gray-300 rounded-[30px]" value="2024-07-25" />
-                </div>
+              <div class="mb-4 w-full">
+                <label class="block text-gray-700 mb-2" for="start-date">Start Date</label>
+                <input v-model="startDate" type="date" id="start-date" class="w-full p-2 border border-gray-300 rounded-[30px]" />
+              </div>
+              <div class="mb-4 w-full">
+                <label class="block text-gray-700 mb-2" for="end-date">End Date</label>
+                <input v-model="endDate" type="date" id="end-date" class="w-full p-2 border border-gray-300 rounded-[30px]" />
+              </div>
             </div>
-            
             <div class="mb-4">
               <label class="block text-gray-700 mb-2" for="description">Description</label>
-              <textarea id="description" class="w-full p-2 border border-gray-300 rounded-[20px]" rows="4" placeholder="Develop an e-commerce platform that allows users to purchase products online with an intuitive user experience and advanced functionalities."></textarea>
+              <textarea v-model="description" id="description" class="w-full p-2 border border-gray-300 rounded-[20px]" rows="4" placeholder="Develop an e-commerce platform that allows users to purchase products online with an intuitive user experience and advanced functionalities."></textarea>
             </div>
-
             <div class="flex flex-col items-center">
-                <button @click.prevent="goToDashboard" class="text-gray-700 py-2 px-8 rounded-[30px] border border-primary flex items-center hover:bg-primary hover:text-white active:bg-primary active:text-white">
+              <button type="submit" class="text-gray-700 py-2 px-8 rounded-[30px] border border-primary flex items-center hover:bg-primary hover:text-white active:bg-primary active:text-white">
                 Create
-                </button>
-            </div>  
+              </button>
+            </div>
           </form>
         </div>
       </div>
