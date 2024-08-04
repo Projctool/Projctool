@@ -11,31 +11,38 @@ export default {
     const startDate = ref('');
     const endDate = ref('');
     const description = ref('');
+    const formSubmitted = ref(false);
 
     const createProject = (event) => {
       event.preventDefault();
-      console.log('Submit button clicked');
-      console.log('createProject method called');
-      console.log('Form Data:', {
-        projectName: projectName.value,
-        budget: budget.value,
-        methodology: methodology.value,
-        startDate: startDate.value,
-        endDate: endDate.value,
-        description: description.value
-      });
+      formSubmitted.value = true;
 
-      router.push({
-        path: '/dashboard',
-        query: {
-          name: projectName.value,
+      if (projectName.value && budget.value && methodology.value && startDate.value && endDate.value && description.value) {
+        console.log('Submit button clicked');
+        console.log('createProject method called');
+        console.log('Form Data:', {
+          projectName: projectName.value,
           budget: budget.value,
           methodology: methodology.value,
           startDate: startDate.value,
           endDate: endDate.value,
-          description: description.value,
-        }
-      });
+          description: description.value
+        });
+
+        router.push({
+          path: '/dashboard',
+          query: {
+            name: projectName.value,
+            budget: budget.value,
+            methodology: methodology.value,
+            startDate: startDate.value,
+            endDate: endDate.value,
+            description: description.value,
+          }
+        });
+      } else {
+        console.log('Form is incomplete');
+      }
     };
 
     return {
@@ -45,6 +52,7 @@ export default {
       startDate,
       endDate,
       description,
+      formSubmitted,
       createProject
     };
   }
@@ -94,32 +102,38 @@ export default {
         
         <div class="w-1/2 bg-gray-50 shadow-lg rounded-[30px] p-8">
           <h2 class="text-xl font-bold mb-6">Project Information</h2>
-          <form @submit="createProject">
+          <form @submit.prevent="createProject">
             <div class="mb-4">
               <label class="block text-gray-700 mb-2" for="project-name">Project Name</label>
-              <input v-model="projectName" type="text" id="project-name" class="w-full p-2 border border-gray-300 rounded-[30px]" placeholder="Starfish" />
+              <input v-model="projectName" type="text" id="project-name" class="w-full p-2 border border-gray-300 rounded-[30px]" placeholder="Starfish" required />
+              <p v-if="!projectName && formSubmitted" class="text-red-500 text-sm">Project Name is required.</p>
             </div>
             <div class="mb-4">
               <label class="block text-gray-700 mb-2" for="budget">Budget</label>
-              <input v-model="budget" type="text" id="budget" class="w-full p-2 border border-gray-300 rounded-[30px]" placeholder="$20 000" />
+              <input v-model="budget" type="text" id="budget" class="w-full p-2 border border-gray-300 rounded-[30px]" placeholder="$20 000" required />
+              <p v-if="!budget && formSubmitted" class="text-red-500 text-sm">Budget is required.</p>
             </div>
             <div class="mb-4">
               <label class="block text-gray-700 mb-2" for="methodology">Project Methodology</label>
-              <input v-model="methodology" type="text" id="methodology" class="w-full p-2 border border-gray-300 rounded-[30px]" placeholder="Agile" />
+              <input v-model="methodology" type="text" id="methodology" class="w-full p-2 border border-gray-300 rounded-[30px]" placeholder="Agile" required />
+              <p v-if="!methodology && formSubmitted" class="text-red-500 text-sm">Project Methodology is required.</p>
             </div>
             <div class="flex justify-center space-x-5">
               <div class="mb-4 w-full">
                 <label class="block text-gray-700 mb-2" for="start-date">Start Date</label>
-                <input v-model="startDate" type="date" id="start-date" class="w-full p-2 border border-gray-300 rounded-[30px]" />
+                <input v-model="startDate" type="date" id="start-date" class="w-full p-2 border border-gray-300 rounded-[30px]" required />
+                <p v-if="!startDate && formSubmitted" class="text-red-500 text-sm">Start Date is required.</p>
               </div>
               <div class="mb-4 w-full">
                 <label class="block text-gray-700 mb-2" for="end-date">End Date</label>
-                <input v-model="endDate" type="date" id="end-date" class="w-full p-2 border border-gray-300 rounded-[30px]" />
+                <input v-model="endDate" type="date" id="end-date" class="w-full p-2 border border-gray-300 rounded-[30px]" required />
+                <p v-if="!endDate && formSubmitted" class="text-red-500 text-sm">End Date is required.</p>
               </div>
             </div>
             <div class="mb-4">
               <label class="block text-gray-700 mb-2" for="description">Description</label>
-              <textarea v-model="description" id="description" class="w-full p-2 border border-gray-300 rounded-[20px]" rows="4" placeholder="Develop an e-commerce platform that allows users to purchase products online with an intuitive user experience and advanced functionalities."></textarea>
+              <textarea v-model="description" id="description" class="w-full p-2 border border-gray-300 rounded-[20px]" rows="4" placeholder="Develop an e-commerce platform..." required></textarea>
+              <p v-if="!description && formSubmitted" class="text-red-500 text-sm">Description is required.</p>
             </div>
             <div class="flex flex-col items-center">
               <button type="submit" class="text-gray-700 py-2 px-8 rounded-[30px] border border-primary flex items-center hover:bg-primary hover:text-white active:bg-primary active:text-white">

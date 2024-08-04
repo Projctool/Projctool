@@ -21,6 +21,7 @@ export default {
         endDate: route.query.endDate || '',
         description: route.query.description || ''
       },
+      formSubmitted: false,
       isPopupVisible: false,
       isMinimized: false,
       selected: null,
@@ -58,6 +59,12 @@ export default {
     },
     toggleModal() {
       this.showModal = !this.showModal;
+      this.formSubmitted = false;
+    },
+    validateForm() {
+      this.formSubmitted = true;
+      const { name, budget, methodology, startDate, endDate } = this.project;
+      return name && budget && methodology && startDate && endDate;
     },
     handleMenuClick(index) {
       this.selected = index;
@@ -161,22 +168,27 @@ export default {
             <div class="mb-4">
               <label class="block text-sm font-semibold mb-2">Project Name</label>
               <input v-model="project.name" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md" required/>
+              <p v-if="!project.name && formSubmitted" class="text-red-500 text-sm">Project Name is required.</p>
             </div>
             <div class="mb-4">
               <label class="block text-sm font-semibold mb-2">Budget</label>
               <input v-model="project.budget" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md" required/>
+              <p v-if="!project.budget && formSubmitted" class="text-red-500 text-sm">Budget is required.</p>
             </div>
             <div class="mb-4">
               <label class="block text-sm font-semibold mb-2">Methodology</label>
               <input v-model="project.methodology" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md" required/>
+              <p v-if="!project.methodology && formSubmitted" class="text-red-500 text-sm">Methodology is required.</p>
             </div>
             <div class="mb-4">
               <label class="block text-sm font-semibold mb-2">Start Date</label>
               <input v-model="project.startDate" type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md" required/>
+              <p v-if="!project.startDate && formSubmitted" class="text-red-500 text-sm">Start Date is required.</p>
             </div>
             <div class="mb-4">
               <label class="block text-sm font-semibold mb-2">End Date</label>
               <input v-model="project.endDate" type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md" required/>
+              <p v-if="!project.endDate && formSubmitted" class="text-red-500 text-sm">End Date is required.</p>
             </div>
             <div class="mb-4">
               <label class="block text-sm font-semibold mb-2">Description</label>

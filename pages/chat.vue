@@ -96,7 +96,8 @@ const handleSubmit = async () => {
 }
 
 const cleanMessage = (message: string) => {
-  return message
+  // Elimina los caracteres no deseados
+  const cleanedMessage = message
       .replace(/\\n/g, ' ')
       .replace(/0:/g, '')
       .replace(/"/g, '')
@@ -104,7 +105,11 @@ const cleanMessage = (message: string) => {
       .replace(/\*\*/g, '')
       .replace(/\*/g, '')
       .replace(/#/g, '')
-      .trim()
+      .trim();
+
+  // Limita el mensaje a dos oraciones
+  const sentences = cleanedMessage.split(/(?<=[.!?])\s+/); // Divide el texto en oraciones
+  return sentences.slice(0, 2).join(' '); // Toma solo las dos primeras oraciones
 }
 </script>
 
