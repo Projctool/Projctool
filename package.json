@@ -35,6 +35,8 @@
   "version": "0.0.0",
   "dependencies": {
     "@infectoone/vue-ganttastic": "^2.3.2",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1",
     "tailwindcss-textshadow": "^2.1.3"
   }
 }

@@ -3,6 +3,8 @@ import GanttChart from './GanttChart.vue';
 import { useRoute } from 'vue-router';
 import { differenceInDays, differenceInMonths } from 'date-fns';
 import Chat from "~/pages/chat.vue";
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
 
 export default {
   components: {
@@ -76,6 +78,15 @@ export default {
         console.log('Proyecto guardado', this.project);
         this.toggleModal();
       }
+    },
+    generatePDF() {
+      const element = document.getElementById('report');
+      html2canvas(element).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('landscape');
+        pdf.addImage(imgData, 'PNG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+        pdf.save('download.pdf');
+      });
     }
   }
 };
@@ -209,7 +220,7 @@ export default {
       </button>
     </div>
 
-    <main class="flex-1 max-w-full max-h-screen overflow-y-auto overflow-x-hidden p-6 bg-gray-100 rounded-[30px]">
+    <main id="report" class="flex-1 max-w-full max-h-screen overflow-y-auto overflow-x-hidden p-6 bg-gray-100 rounded-[30px]">
       <div class="flex justify-between items-center mb-6">
         <div class="flex items-center space-x-4">
           <h1 class="text-2xl font-semibold">Dashboard</h1>
@@ -224,24 +235,19 @@ export default {
           </svg>
           </button >
         </div>
-     
-
-        
 
         <div class="flex items-center space-x-4">
-          <button class="text-gray-700 py-2 px-4 rounded-[30px] border border-primary flex items-center">
-          <svg class="w-4 h-4 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v12m0 0l-4-4m4 4l4-4m-4         4V4m0 16h8m-8 0H4"></path>
-          </svg>
-          Download
-        </button>
+          <button @click="generatePDF" class="text-gray-700 py-2 px-4 rounded-[30px] border border-primary flex items-center hover:bg-primary hover:text-white active:bg-primary active:text-white">
+            <svg class="w-4 h-4 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v12m0 0l-4-4m4 4l4-4m-4         4V4m0 16h8m-8 0H4"></path>
+            </svg>
+            Download
+          </button>
 
           <div class="bg-whitegray text-gray-700 py-2 px-4 rounded-[30px] shadow">
-
             {{ project.startDate }}
           </div >
           <div class="bg-whitegray text-gray-700 py-2 px-4 rounded-[30px] shadow">
-
             {{ project.endDate }}
           </div>
         </div>
