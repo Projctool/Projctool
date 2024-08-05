@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex-1 overflow-y-auto p-4 bg-white rounded-lg shadow-md max-h-96">
+    <div ref="messageContainer" class="flex-1 overflow-y-auto p-4 bg-white rounded-lg shadow-md max-h-96">
       <ul class="space-y-4">
         <li
             v-for="(message, index) in messages"
@@ -8,7 +8,12 @@
             :class="{'justify-end': message.role === 'user', 'justify-start': message.role === 'ai'}"
             class="flex items-center"
         >
-          <div class="flex items-center max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl">
+          <div
+              :class="{
+                'flex-row-reverse': message.role === 'user',
+                'flex-row': message.role === 'ai'
+              }" 
+              class="flex items-center max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl">
             <img
                 v-if="message.role === 'user'"
                 src="https://static.thenounproject.com/png/363640-200.png"
@@ -23,8 +28,8 @@
             >
             <p
                 :class="{
-                'bg-gray-600 p-3 rounded text-white text-sm': message.role === 'user',
-                'bg-gray-800 p-3 rounded self-end text-white text-sm': message.role === 'ai'
+                'bg-gray-600 p-3 rounded text-white text-sm ml-2': message.role === 'user',
+                'bg-gray-800 p-3 rounded self-end text-white text-sm mr-2': message.role === 'ai'
               }"
                 class="p-3 rounded-lg break-words"
             >
@@ -56,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import axios from 'axios'
 
 interface Message {
@@ -67,7 +72,6 @@ interface Message {
 const messages = ref<Message[]>([])
 const input = ref('')
 
-// Función para ajustar el tamaño del textarea automáticamente
 const autoResize = (event: Event) => {
   const textarea = event.target as HTMLTextAreaElement
   textarea.style.height = 'auto'
@@ -107,7 +111,6 @@ const isProjectRelated = (message: string) => {
 }
 
 const cleanMessage = (message: string) => {
-  // Elimina los caracteres no deseados
   const cleanedMessage = message
       .replace(/\\n/g, ' ')
       .replace(/0:/g, '')
@@ -118,12 +121,30 @@ const cleanMessage = (message: string) => {
       .replace(/#/g, '')
       .trim();
 
-  // Limita el mensaje a dos oraciones
-  const sentences = cleanedMessage.split(/(?<=[.!?])\s+/); // Divide el texto en oraciones
-  return sentences.slice(0, 2).join(' '); // Toma solo las dos primeras oraciones
+  const sentences = cleanedMessage.split(/(?<=[.!?])\s+/); 
+  return sentences.slice(0, 2).join(' '); 
 }
+
+const messageContainer = ref<HTMLElement | null>(null)
+
+const scrollToBottom = () => {
+  if (messageContainer.value) {
+    messageContainer.value.scrollTop = messageContainer.value.scrollHeight
+  }
+}
+
+onMounted(() => {
+  const observer = new MutationObserver(scrollToBottom)
+  if (messageContainer.value) {
+    observer.observe(messageContainer.value, { childList: true, subtree: true })
+  }
+  onBeforeUnmount(() => {
+    observer.disconnect()
+  })
+})
+
 </script>
 
 <style scoped>
-/* Añade estilos personalizados aquí si es necesario */
+
 </style>
