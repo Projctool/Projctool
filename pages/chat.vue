@@ -45,7 +45,6 @@
         <button
             type="submit"
             class="p-2 bg-primary text-white rounded-full flex items-center justify-center hover:bg-blue-800 transition duration-300 ease-in-out"
-
         >
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
             <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
@@ -55,7 +54,6 @@
     </div>
   </div>
 </template>
-
 
 <script setup lang="ts">
 import { ref } from 'vue'
@@ -86,13 +84,26 @@ const handleSubmit = async () => {
 
   try {
     const response = await axios.post('/api/chat', { messages: [userMessage] })
-    const aiMessage = { role: 'ai', content: response.data }
+    const aiMessage = { role: 'ai', content: getProjectRelatedResponse(response.data) }
     messages.value.push(aiMessage)
   } catch (error) {
     console.error('Error durante la solicitud a la API', error)
   }
 
   input.value = ''
+}
+
+const getProjectRelatedResponse = (message: string) => {
+  if (isProjectRelated(message)) {
+    return message
+  } else {
+    return 'Lo siento, pero eso no te puedo responder, ya que soy una herramienta integral impulsada por IA diseñada para ayudarte a gestionar proyectos de software de manera eficiente. Ya sea que estés trabajando en un proyecto a largo plazo o en un sprint corto, ofrezco funciones que hacen que la asignación de tareas, la creación de historias de usuario, la estimación de tiempos y la gestión de costos sean sencillas y accesibles. Asimismo, también doy recomendaciones y optimizaciones inteligentes para mejorar los flujos de trabajo de gestión de proyectos.'
+  }
+}
+
+const isProjectRelated = (message: string) => {
+  const projectKeywords = ['proyecto', 'tarea', 'historia de usuario', 'estimación de tiempos', 'gestión de costos', 'asignación de tareas']
+  return projectKeywords.some(keyword => message.toLowerCase().includes(keyword))
 }
 
 const cleanMessage = (message: string) => {
