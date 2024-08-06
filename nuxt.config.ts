@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss'],
 
   nitro: {
-    preset: 'vercel-edge', 
+    preset: 'netlify-edge', 
   },
 
   runtimeConfig: {
