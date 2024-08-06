@@ -1,6 +1,6 @@
-# Vercel AI SDK, Nuxt and OpenAI Chat Example
+#  Projctool
 
-This example shows how to use the [Vercel AI SDK](https://sdk.vercel.ai/docs) with [Nuxt](https://nuxt.com/), and [OpenAI](https://openai.com) to create a ChatGPT-like AI-powered streaming chat bot.
+please configure your own API key of AI.
 
 ## Deploy your own
 
