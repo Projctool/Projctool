@@ -1,6 +1,6 @@
 <script >
 import GanttChart from './GanttChart.vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { differenceInDays, differenceInMonths } from 'date-fns';
 import Chat from "~/pages/chat.vue";
 import html2canvas from 'html2canvas'
@@ -32,7 +32,7 @@ export default {
           label: 'Dashboard', iconPath: 'M4.317 2H7.34491C8.60804 2 9.62033 3.15 9.62033 4.561V7.97C9.62033 9.39 8.60804 10.53 7.34491 10.53H4.317C3.06283 10.53 2.04158 9.39 2.04158 7.97V4.561C2.04158 3.15 3.06283 2 4.317 2ZM4.317 13.4697H7.34491C8.60804 13.4697 9.62033 14.6107 9.62033 16.0307V19.4397C9.62033 20.8497 8.60804 21.9997 7.34491 21.9997H4.317C3.06283 21.9997 2.04158 20.8497 2.04158 19.4397V16.0307C2.04158 14.6107 3.06283 13.4697 4.317 13.4697ZM17.6829 2H14.655C13.3919 2 12.3796 3.15 12.3796 4.561V7.97C12.3796 9.39 13.3919 10.53 14.655 10.53H17.6829C18.9371 10.53 19.9583 9.39 19.9583 7.97V4.561C19.9583 3.15 18.9371 2 17.6829 2ZM14.655 13.4697H17.6829C18.9371 13.4697 19.9583 14.6107 19.9583 16.0307V19.4397C19.9583 20.8497 18.9371 21.9997 17.6829 21.9997H14.655C13.3919 21.9997 12.3796 20.8497 12.3796 19.4397V16.0307C12.3796 14.6107 13.3919 13.4697 14.655 13.4697Z'
         },
         {
-          label: 'Projects', iconPath: 'M6.81681 2.0004H15.183C18.2297 2.0004 19.9497 3.9294 19.9587 7.3304V16.6704C19.9587 20.0704 18.2297 22.0004 15.183 22.0004H6.81681C3.77009 22.0004 2.04202 20.0704 2.04202 16.6704V7.3304C2.04202 3.9294 3.77009 2.0004 6.81681 2.0004ZM11.0443 17.8604C11.4304 17.8604 11.752 17.5404 11.7878 17.1104V6.9204C11.8236 6.6104 11.6901 6.2994 11.4483 6.1304C11.1965 5.9604 10.892 5.9604 10.651 6.1304C10.4082 6.2994 10.2747 6.6104 10.3007 6.9204V17.1104C10.3464 17.5404 10.668 17.8604 11.0443 17.8604ZM15.166 17.8604C15.5422 17.8604 15.8638 17.5404 15.9095 17.1104V13.8304C15.9355 13.5094 15.802 13.2104 15.5593 13.0404C15.3183 12.8704 15.0137 12.8704 14.7629 13.0404C14.5201 13.2104 14.3866 13.5094 14.4224 13.8304V17.1104C14.4583 17.5404 14.7799 17.8604 15.166 17.8604ZM7.61321 17.1104C7.57738 17.5404 7.25577 17.8604 6.86967 17.8604C6.48446 17.8604 6.16196 17.5404 6.12702 17.1104V10.2004C6.10015 9.8894 6.23363 9.5804 6.4764 9.4104C6.71738 9.2404 7.02286 9.2404 7.26473 9.4104C7.50571 9.5804 7.64098 9.8894 7.61321 10.2004V17.1104Z'
+          label: 'New Project', iconPath: 'M6.81681 2.0004H15.183C18.2297 2.0004 19.9497 3.9294 19.9587 7.3304V16.6704C19.9587 20.0704 18.2297 22.0004 15.183 22.0004H6.81681C3.77009 22.0004 2.04202 20.0704 2.04202 16.6704V7.3304C2.04202 3.9294 3.77009 2.0004 6.81681 2.0004ZM11.0443 17.8604C11.4304 17.8604 11.752 17.5404 11.7878 17.1104V6.9204C11.8236 6.6104 11.6901 6.2994 11.4483 6.1304C11.1965 5.9604 10.892 5.9604 10.651 6.1304C10.4082 6.2994 10.2747 6.6104 10.3007 6.9204V17.1104C10.3464 17.5404 10.668 17.8604 11.0443 17.8604ZM15.166 17.8604C15.5422 17.8604 15.8638 17.5404 15.9095 17.1104V13.8304C15.9355 13.5094 15.802 13.2104 15.5593 13.0404C15.3183 12.8704 15.0137 12.8704 14.7629 13.0404C14.5201 13.2104 14.3866 13.5094 14.4224 13.8304V17.1104C14.4583 17.5404 14.7799 17.8604 15.166 17.8604ZM7.61321 17.1104C7.57738 17.5404 7.25577 17.8604 6.86967 17.8604C6.48446 17.8604 6.16196 17.5404 6.12702 17.1104V10.2004C6.10015 9.8894 6.23363 9.5804 6.4764 9.4104C6.71738 9.2404 7.02286 9.2404 7.26473 9.4104C7.50571 9.5804 7.64098 9.8894 7.61321 10.2004V17.1104Z'
         }
       ]
     };
@@ -67,6 +67,9 @@ export default {
       const { name, budget, methodology, startDate, endDate } = this.project;
       return name && budget && methodology && startDate && endDate;
     },
+    minimizeSidebar() {
+      this.isMinimized = true;
+    },
     handleMenuClick(index) {
       this.selected = index;
       if (this.isMinimized) {
@@ -94,48 +97,58 @@ export default {
 
 <template>
   <div class="font-nunito flex h-screen bg-white p-6 space-x-4 ">
-    <aside :class="['bg-whitegray text-white rounded-[30px] transition-all duration-300', isMinimized ? 'w-20' : 'w-64']">
+    <aside 
+      :class="['bg-whitegray text-white rounded-[30px] transition-all duration-300', isMinimized ? 'w-20' : 'w-64']" 
+      @mouseenter="expandSidebar"
+      @mouseleave="minimizeSidebar"
+    >
       <div class="p-4">
         <div :class="['flex items-center mb-6', isMinimized ? 'justify-center' : 'justify-start']">
           <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <g filter="url(#filter0_d_620_1426)">
-          <rect x="4.64584" width="62.7083" height="64" fill="url(#pattern0_620_1426)" shape-rendering="crispEdges"/>
-          </g>
-          <defs>
-          <filter id="filter0_d_620_1426" x="0.645836" y="0" width="70.7083" height="72" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-          <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-          <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-          <feOffset dy="4"/>
-          <feGaussianBlur stdDeviation="2"/>
-          <feComposite in2="hardAlpha" operator="out"/>
-          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
-          <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_620_1426"/>
-          <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_620_1426" result="shape"/>
-          </filter>
-          <pattern id="pattern0_620_1426" patternContentUnits="objectBoundingBox" width="1" height="1">
-          <use xlink:href="#image0_620_1426" transform="matrix(0.00127575 0 0 0.00125 -0.010299 0)"/>
-          </pattern>
-          <image id="image0_620_1426" width="800" height="800" xlink:href="https://i.postimg.cc/SQ8cYW9j/projectool.png"/>
-          </defs>
-          </svg>          
+            <g filter="url(#filter0_d_620_1426)">
+              <rect x="4.64584" width="62.7083" height="64" fill="url(#pattern0_620_1426)" shape-rendering="crispEdges" />
+            </g>
+            <defs>
+              <filter id="filter0_d_620_1426" x="0.645836" y="0" width="70.7083" height="72" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                <feOffset dy="4" />
+                <feGaussianBlur stdDeviation="2" />
+                <feComposite in2="hardAlpha" operator="out" />
+                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+                <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_620_1426" />
+                <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_620_1426" result="shape" />
+              </filter>
+              <pattern id="pattern0_620_1426" patternContentUnits="objectBoundingBox" width="1" height="1">
+                <use xlink:href="#image0_620_1426" transform="matrix(0.00127575 0 0 0.00125 -0.010299 0)" />
+              </pattern>
+              <image id="image0_620_1426" width="800" height="800" xlink:href="https://i.postimg.cc/SQ8cYW9j/projectool.png" />
+            </defs>
+          </svg>
 
-          
-          <h1 v-if="!isMinimized" class="text-3xl font-bold mb-4 text-primary text-shadow-custom ">Projctool</h1>
+          <h1 v-if="!isMinimized" class="text-3xl font-bold mb-4 text-primary text-shadow-custom">Projctool</h1>
         </div>
-      
-        <button @click="toggleSidebar" class="text-black focus:outline-none">
-          <svg v-if="isMinimized" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-          <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-      
+
         <nav class="mt-4">
           <ul>
             <li v-for="(item, index) in menuItems" :key="index" class="mb-2">
+              <nuxt-link 
+                v-if="item.label === 'New Project'"
+                to="/"
+                @click.native="handleMenuClick(index)"
+                :class="[
+                  'flex items-center py-2 px-4 rounded-[30px] transition-colors duration-300', 
+                  selected === index ? 'bg-gray-700 text-white' : 'hover:bg-gray-700'
+                ]"
+              >
+                <svg :class="['h-6 w-6', selected === index ? 'text-white' : 'text-gray-400']" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="currentColor" :d="item.iconPath" />
+                  <path fill="currentColor" :d="item.iconPath" />
+                </svg>
+                <span v-if="!isMinimized" :class="['ml-2', selected === index ? 'text-white' : 'text-gray-400']">{{ item.label }}</span>
+              </nuxt-link>
               <a 
+                v-else
                 href="#" 
                 @click="handleMenuClick(index)" 
                 :class="[
