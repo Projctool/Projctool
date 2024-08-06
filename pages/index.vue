@@ -101,7 +101,7 @@ export default {
             We understand that managing a project can be a challenge. That's why we've designed an intuitive platform that simplifies planning and management, so you can focus on what really matters: making your project a success!
           </p>
           <p class="text-gray-700 text-xl mb-4">
-            Don't waste any more time! Get started now and let Projctool guide you every step of the way to success. Complete the form below and see your project come to life with our expert help.
+            Don't waste any more time! Get started now and let Projctool guide you every step of the way to success. Complete the form below and see your project come to life with our expert help. <br> Please configure own API key in your project :D
           </p>
         </div>
         
