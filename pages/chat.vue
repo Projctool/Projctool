@@ -121,8 +121,8 @@ const cleanMessage = (message: string) => {
       .replace(/#/g, '')
       .trim();
 
-  const sentences = cleanedMessage.split(/(?<=[.!?])\s+/); 
-  return sentences.slice(0, 2).join(' '); 
+  const sentences = cleanedMessage.split(/(?<=[.!?])\s+/);
+  return sentences.slice(0, 2).join(' ');
 }
 
 const messageContainer = ref<HTMLElement | null>(null)
