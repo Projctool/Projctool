@@ -18,16 +18,20 @@ export default {
       formSubmitted.value = true;
 
       if (projectName.value && budget.value && methodology.value && startDate.value && endDate.value && description.value) {
-        console.log('Submit button clicked');
-        console.log('createProject method called');
-        console.log('Form Data:', {
-          projectName: projectName.value,
-          budget: budget.value,
-          methodology: methodology.value,
-          startDate: startDate.value,
-          endDate: endDate.value,
-          description: description.value
-        });
+        // Convert description to JSON and parse it
+        let parsedDescription;
+        try {
+          parsedDescription = JSON.parse(description.value);
+
+          // Validate the parsed JSON structure
+          if (typeof parsedDescription !== 'object' || !parsedDescription.tasks || !Array.isArray(parsedDescription.tasks)) {
+            throw new Error('Invalid JSON structure');
+          }
+
+        } catch (error) {
+          console.error('Invalid JSON format in description:', error.message);
+          return;
+        }
 
         router.push({
           path: '/dashboard',
@@ -37,13 +41,14 @@ export default {
             methodology: methodology.value,
             startDate: startDate.value,
             endDate: endDate.value,
-            description: description.value,
+            description: JSON.stringify(parsedDescription),
           }
         });
       } else {
         console.log('Form is incomplete');
       }
     };
+
 
     return {
       projectName,
@@ -132,7 +137,7 @@ export default {
             </div>
             <div class="mb-4">
               <label class="block text-gray-700 mb-2" for="description">Description</label>
-              <textarea v-model="description" id="description" class="w-full p-2 border border-gray-300 rounded-[20px]" rows="4" placeholder="Develop an e-commerce platform..." required></textarea>
+              <textarea v-model="description" id="description" class="w-full p-2 border border-gray-300 rounded-[20px]" rows="4" placeholder="" required></textarea>
               <p v-if="!description && formSubmitted" class="text-red-500 text-sm">Description is required.</p>
             </div>
             <div class="flex flex-col items-center">

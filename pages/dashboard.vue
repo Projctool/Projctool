@@ -13,7 +13,18 @@ export default {
   },
   data() {
     const route = useRoute();
+    const tasks = ref([]);
+
+    onMounted(() => {
+      const description = route.query.description ? JSON.parse(route.query.description) : { tasks: [] };
+      tasks.value = description.tasks.map(task => ({
+        ...task,
+        color: task.color || '#4A90E2', // Default color if not specified
+      }));
+    });
+
     return {
+      tasks,
       showModal: false,
       project: {
         name: route.query.name || '',
@@ -85,7 +96,7 @@ export default {
         const imgData = canvas.toDataURL('image/png');
         const pdf = new jsPDF('landscape');
         pdf.addImage(imgData, 'PNG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
-        pdf.save('download.pdf');
+        pdf.save('Diagrama.pdf');
       });
     }
   }
@@ -329,31 +340,21 @@ export default {
       </div>
 
       <div class="flex items-center space-x-4">
-        
+
         <div class="bg-whitegray p-5 rounded-[30px] shadow flex flex-col items-center">
           <h2 class="text-xl font-semibold mb-4">Tasks</h2>
           <div class="relative">
             <div class="flex flex-col justify-between items-center relative z-10 space-y-3">
-            
-              <div class="text-gray-700 py-2 px-4 rounded-full border border-primary">
-                <span class="text-xs">1</span>
-              </div >
-              <div class="text-gray-700 py-2 px-4 rounded-full border border-primary">
-                <span class="text-xs">2</span>
-              </div >
-              <div class="text-gray-700 py-2 px-4 rounded-full border border-primary">
-                <span class="text-xs">3</span>
-              </div >
-              <div class="text-gray-700 py-2 px-4 rounded-full border border-primary">
-                <span class="text-xs">4</span>
-              </div >
-              <div class="text-gray-700 py-2 px-4 rounded-full border border-primary">
-                <span class="text-xs">5</span>
-              </div >
-              <div class="text-gray-700 py-2 px-4 rounded-full border border-primary">
-                <span class="text-xs">6</span>
-              </div >
-            
+              <div v-for="task in tasks" :key="task.id" class="flex items-center space-x-2">
+                <!-- Mostrar el número de la tarea -->
+                <div class="text-gray-700 py-2 px-4 rounded-full border border-primary">
+                  <span class="text-xs">{{ task.id }}</span>
+                </div>
+                <!-- Mostrar el nombre de la asignación -->
+                <div class="text-gray-700 py-2 px-4 rounded-full border border-primary">
+                  <span class="text-xs">{{ task.assign }}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

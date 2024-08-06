@@ -106,7 +106,7 @@ const getProjectRelatedResponse = (message: string) => {
 }
 
 const isProjectRelated = (message: string) => {
-  const projectKeywords = ['proyecto', 'tarea', 'historia de usuario', 'estimación de tiempos', 'gestión de costos', 'asignación de tareas']
+  const projectKeywords = ['hola','proyecto', 'tarea', 'historia de usuario', 'estimación de tiempos', 'gestión de costos', 'asignación de tareas']
   return projectKeywords.some(keyword => message.toLowerCase().includes(keyword))
 }
 
