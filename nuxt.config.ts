@@ -1,5 +1,3 @@
-import { link } from "fs";
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -10,8 +8,8 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    openaiApiKey: '',
-    assistantId: '',
+    // openaiApiKey: '',
+    // assistantId: '',
   },
 
   compatibilityDate: '2024-07-05',
